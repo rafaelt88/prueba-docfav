@@ -12,7 +12,7 @@ array_filter(parse_ini_file(__DIR__ . '/../.env'), function ($value, $name) {
 
 // Create a simple "default" Doctrine ORM configuration for Attributes
 $config = ORMSetup::createAttributeMetadataConfiguration(paths: [
-    __DIR__ . '/Entities'
+    __DIR__ . '/Entities/'
 ], isDevMode: true);
 
 // configuring the database connection

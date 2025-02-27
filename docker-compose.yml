@@ -3,24 +3,16 @@ services:
     build: 
       context: .
       dockerfile: ./docker/Dockerfile
+    image: custom-php:8.2
     container_name: php_app
     volumes:
-      - .env:/var/www/.env
-      - ./bin:/var/www/bin
-      - ./config:/var/www/config
-      - ./public:/var/www/html
-      - ./src:/var/www/src
-      - ./test:/var/www/test
-      - ./vendor:/var/www/vendor
+      - .:/var/www/
     ports:
       - "8080:80"
     networks:
       - app-network
     depends_on:
       - db
-    working_dir: /var/www/html
-    command: >
-      sh -c "php -S 0.0.0.0:80"
 
   db:
     image: mysql:8.0
