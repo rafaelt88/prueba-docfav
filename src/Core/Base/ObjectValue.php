@@ -1,12 +1,9 @@
 <?php
 namespace App\Core\Base;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\MappedSuperclass;
 
-/**
- *
- * @ORM\MappedSuperclass
- */
+#[MappedSuperclass]
 abstract class ObjectValue
 {
 

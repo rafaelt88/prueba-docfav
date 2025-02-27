@@ -2,6 +2,7 @@
 namespace Tests\ValueObject;
 
 use App\Attributes\Password;
+use App\Exceptions\WeakPasswordException;
 use PHPUnit\Framework\TestCase;
 
 class PasswordTest extends TestCase
@@ -15,7 +16,7 @@ class PasswordTest extends TestCase
 
     public function testShortPassword()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(WeakPasswordException::class);
         new Password('short');
     }
 }

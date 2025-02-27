@@ -8,7 +8,18 @@ services:
     volumes:
       - .:/var/www/
     ports:
-      - "8080:80"
+      - "8888:80"
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  adminer:
+    image: adminer
+    container_name: admin_db
+    restart: always
+    ports:
+      - "7777:8080"
     networks:
       - app-network
     depends_on:
@@ -17,13 +28,14 @@ services:
   db:
     image: mysql:8.0
     container_name: mysql_db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_DBNAME}
       MYSQL_USER: ${DATABASE_USER}
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
-      - ./docker/data:/var/lib/mysql
+      - ./docker/data/5.7:/var/lib/mysql
     networks:
       - app-network
 

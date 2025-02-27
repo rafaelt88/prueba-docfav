@@ -1,15 +1,15 @@
-# Aplicacion de prueba docfav.
+# Aplicación de Prueba Docfav
 
-Este proyecto es una aplicación PHP que está containerizada usando Docker y gestionada con Docker Compose. Incluye un servidor de aplicaciones PHP y una base de datos MySQL.
+Este proyecto es una aplicación PHP containerizada utilizando Docker y gestionada con Docker Compose. Incluye un servidor de aplicaciones PHP y una base de datos MySQL.
 
-## Requisitos previos
+## Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado lo siguiente en tu máquina:
 
 - Docker
 - Docker Compose
 
-## Estructura del proyecto
+## Estructura del Proyecto
 
 El proyecto está estructurado de la siguiente manera:
 
@@ -23,49 +23,61 @@ El proyecto está estructurado de la siguiente manera:
 
 ## Configuración de Docker Compose
 
-El archivo `docker-compose.yml` define dos servicios:
+El archivo `docker-compose.yml` define los siguientes servicios:
 
-1. **app**: El servidor de la aplicación PHP.
-   - Se construye a partir del `Dockerfile` en la raíz del proyecto.
-   - Mapea directorios locales al contenedor para facilitar el desarrollo.
-   - Expone la aplicación en el puerto `8080`.
-   - Ejecuta un servidor PHP integrado en el puerto `80`.
+1.  **app**: El servidor de la aplicación PHP.
+    -   Se construye a partir del `Dockerfile` en la raíz del proyecto.
+    -   Mapea directorios locales al contenedor para facilitar el desarrollo.
+    -   Expone la aplicación en el puerto `8888`.
+    -   Ejecuta un servidor PHP integrado en el puerto `80`.
+2.  **db**: Una base de datos MySQL.
+    -   Utiliza la imagen `mysql:8.0`.
+    -   Configura la contraseña de root, la base de datos, el usuario y la contraseña.
+    -   Persiste los datos en un volumen local (`./docker/data`).
+3.  **adminer**: Una base de datos Adminer.
+    -   Utiliza la imagen `adminer`.
+    -   Expone la aplicación en el puerto `7777`.
+    -   Linkeada a la base de datos mysql.
 
-2. **db**: Una base de datos MySQL.
-   - Utiliza la imagen `mysql:8.0`.
-   - Configura la contraseña de root, la base de datos, el usuario y la contraseña.
-   - Persiste los datos en un volumen local (`./docker/data`).
-   
-## Configuración de la base de datos
+## Configuración de la Base de Datos
 
-La configuración de la base de datos se encuentra en el archivo `config/database.php`. Este archivo define los parámetros de conexión a la base de datos MySQL que se ejecuta en el contenedor db.
+La configuración de la base de datos se encuentra en el archivo `config/database.php`. Este archivo define los parámetros de conexión a la base de datos MySQL que se ejecuta en el contenedor `db`.
 
-Para efectos de unificación del proyecto y docker, se recomienda controlar las credenciales de la conexión directamente desde el fichero `.env`.
+Para unificar el proyecto y Docker, se recomienda controlar las credenciales de conexión directamente desde el archivo `.env`.
 
-## Instalar la aplicación
+## Acceso a la Base de Datos
+
+Para consultar los datos cargados, se ha agregado un contenedor de `adminer`, al cual puedes acceder mediante [http://localhost:7777](http://localhost:7777/?server=db&username=docfav&db=docfav).
+
+## Instalación de la Aplicación
 
 Para instalar la aplicación, sigue estos pasos:
 
-1. Clona este repositorio en tu máquina local.
-2. Utilizando `composer install` instala las dependencias.
+1.  Clona el repositorio en tu máquina con `git clone git@github.com:rafaelt88/prueba-docfav.git`.
+2.  Ejecuta `docker compose up -d` para levantar los contenedores.
+3.  Ejecuta `docker exec -it php_app composer install` para instalar las dependencias del proyecto.
+4.  Ejecuta `docker exec -it php_app php bin/doctrine orm:schema-tool:create` para crear las estructuras de datos.
+5.  Finalmente, puedes acceder a la aplicación mediante [http://localhost:8888](http://localhost:8888).
 
-## Desplegar la aplicación
+## Despliegue de la Aplicación
 
 Para desplegar la aplicación, sigue estos pasos:
 
-1. Actualiza el proyecto de preferencia en la rama `master` con `git pull`.
-2. Utilizando `composer update` actualiza las dependencias.
-3. Ejecuta `docker compose up -d` comando para levantar los contenedores.
-4. Una vez que los contenedores estén en ejecución, puedes acceder a la aplicación en tu navegador web a través del [http://localhost:8080](http://localhost:8080).
+1.  Actualiza el proyecto con `git pull`, preferiblemente utilizando la rama `master`.
+2.  Ejecuta `docker exec -it php_app composer update` para actualizar las dependencias.
+3.  Ejecuta `docker compose up -d` para levantar los contenedores.
+4.  Finalmente, puedes acceder a la aplicación mediante [http://localhost:8888](http://localhost:8888).
 
-## Detener la aplicación
+La ruta `http://localhost:8888/register/user?name=<name>&email=<email>&password=<password>` proporciona una forma directa de probar el controlador de registro de usuarios. Al usar esta ruta con los parámetros adecuados, se pueden validar las reglas de negocio implementadas en el controlador y asegurar que los usuarios se registren correctamente en la base de datos.
 
-Para detener y eliminar los contenedores, ejecuta el comando `docker compose down`.
+## Comandos de Utilidad
 
-## Consola de Doctrine.
-
-El proyecto utiliza Doctrine, una herramienta de mapeo objeto-relacional (ORM) para PHP, que facilita la interacción con la base de datos. El comando php bin/doctrine es una interfaz de línea de comandos (CLI) que permite ejecutar diversas tareas relacionadas con la base de datos, como la creación de esquemas, migraciones y más.
+-   `docker compose down`: Finaliza los contenedores.
+-   `docker compose up -d --force-recreate --build`: Reconstruye las imágenes antes del despliegue.
+-   `docker exec -it php_app ./vendor/bin/phpunit`: Ejecuta las pruebas automatizadas.
+-   `docker exec -it php_app composer update`: Actualiza las dependencias del proyecto.
+-   `docker exec -it php_app php bin/doctrine orm:schema-tool:update --force`: Actualiza las estructuras de datos.
 
 ## Licencia
-Este proyecto está bajo la licencia [MIT](https://mit-license.org/).
 
+Este proyecto está bajo la licencia [MIT](https://mit-license.org/).

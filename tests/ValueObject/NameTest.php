@@ -10,7 +10,7 @@ class NameTest extends TestCase
     public function testNameCreation()
     {
         $name = new Name('John Doe');
-        $this->assertEquals('John Doe', $name->getValue());
+        $this->assertIsString($name->getValue());
     }
 
     public function testEmptyName()

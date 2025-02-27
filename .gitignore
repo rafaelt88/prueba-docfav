@@ -1,9 +1,7 @@
 /.*
 !.gitignore
-
+!.env
 *.lock
 *.phar
-
-
 /vendor
 /docker/data

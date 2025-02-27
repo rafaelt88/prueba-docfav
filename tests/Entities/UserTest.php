@@ -13,14 +13,13 @@ class UserTest extends TestCase
 
     public function testUserCreation()
     {
-        $userId = new UserId(uuid_create());
         $name = new Name("John Doe");
         $email = new Email("john@example.com");
         $password = new Password("Password123!");
 
-        $user = new User($userId, $name, $email, $password);
+        $user = new User($name, $email, $password);
 
-        $this->assertEquals($userId, $user->getId());
+        $this->assertTrue(uuid_is_valid($user->getId()->getValue()));
         $this->assertEquals($name, $user->getName());
         $this->assertEquals($email, $user->getEmail());
         $this->assertEquals($password, $user->getPassword());

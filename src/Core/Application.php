@@ -8,10 +8,6 @@ use Doctrine\ORM\EntityManager;
 final class Application
 {
 
-    public string $dirroot;
-
-    public bool $devMode;
-
     private EntityManager $entityManager;
 
     private Request $request;
@@ -50,12 +46,9 @@ final class Application
 
             $this->response->send($content);
         } catch (\ReflectionException $e) {
-            $this->response->send('Not found.', 400);
+            $this->response->send('Not found.', 404);
         } catch (\Throwable $e) {
-            // if ($this->devMode) {
-            dd($e);
-            // }
-            $this->response->send('Something wrong!', 400);
+            $this->response->send($e->getMessage(), 400);
         }
     }
 
@@ -72,5 +65,10 @@ final class Application
     public function getRequest(): Request
     {
         return $this->request;
+    }
+
+    public function getResponse(): Response
+    {
+        return $this->response;
     }
 }

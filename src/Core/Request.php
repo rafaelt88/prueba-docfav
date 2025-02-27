@@ -80,13 +80,15 @@ final class Request
         $this->query = $parsedUrl['query'] ?? ''; // Si no hay cadena de consulta, usar ''
 
         // Agregar encabezados desde $_SERVER.
-        array_walk($_SERVER, function ($value, $key) {
-            if (strpos($key, 'HTTP_') === 0) {
-                // Normalizar el nombre del encabezado (ejemplo: HTTP_CONTENT_TYPE => content-type)
-                $name = str_replace('_', '-', substr(strtolower($key), 5));
-                $this->headers[$name] = $value;
+        array_walk(
+            $_SERVER, function ($value, $key) {
+                if (strpos($key, 'HTTP_') === 0) {
+                    // Normalizar el nombre del encabezado (ejemplo: HTTP_CONTENT_TYPE => content-type)
+                    $name = str_replace('_', '-', substr(strtolower($key), 5));
+                    $this->headers[$name] = $value;
+                }
             }
-        });
+        );
 
         // Obtener los parámetros de la consulta (query) desde $_GET.
         $this->params = $_GET;
@@ -120,8 +122,8 @@ final class Request
 
     /**
      * 
-     * @param string $name
-     * @param mixed $default
+     * @param  string $name
+     * @param  mixed  $default
      * @return mixed
      */
     public function get(string $name, mixed $default = null): mixed
