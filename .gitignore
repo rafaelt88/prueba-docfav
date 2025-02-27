@@ -1,0 +1,9 @@
+/.*
+!.gitignore
+
+*.lock
+*.phar
+
+
+/vendor
+/docker/data
